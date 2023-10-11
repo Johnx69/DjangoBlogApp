@@ -70,11 +70,22 @@ WSGI_APPLICATION = "authors_api.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # DATABASES = {"default": env.db("DATABASE_URL")}
+import os
 
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": "mydatabase",
+    # }
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get(
+            "POSTGRES_PORT"
+        ),  # default port you don't need to mention in docker-compose
     }
 }
 
@@ -136,6 +147,8 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_URLS_REGEX = r"^api/.*$"
+
+AUTH_USER_MODEL = "users.User"
 
 LOGGING = {
     "version": 1,
